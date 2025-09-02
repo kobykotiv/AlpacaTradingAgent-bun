@@ -94,8 +94,26 @@ export const SymbolFilterSchema = z.object({
 
 // Portfolio query schemas
 export const PortfolioQuerySchema = z.object({
-  includePositions: z.coerce.boolean().default(true),
-  includeProfitLoss: z.coerce.boolean().default(true),
+  includePositions: z.string().optional().transform((val, ctx) => {
+    if (val === undefined) return true;
+    if (val === 'true') return true;
+    if (val === 'false') return false;
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'includePositions must be "true" or "false"',
+    });
+    return z.NEVER;
+  }),
+  includeProfitLoss: z.string().optional().transform((val, ctx) => {
+    if (val === undefined) return true;
+    if (val === 'true') return true;
+    if (val === 'false') return false;
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'includeProfitLoss must be "true" or "false"',
+    });
+    return z.NEVER;
+  }),
 });
 
 // Trade history query schemas
