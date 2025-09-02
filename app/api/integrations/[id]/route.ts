@@ -15,9 +15,9 @@ import {
 } from '@/app/api/_helpers/response';
 
 interface Props {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export async function DELETE(request: NextRequest, { params }: Props) {
@@ -34,7 +34,7 @@ export async function DELETE(request: NextRequest, { params }: Props) {
     return forbiddenResponse(authResult.error);
   }
 
-  const { id } = params;
+  const { id } = await params;
   
   if (!id || id.trim() === '') {
     return badRequestResponse('Integration ID parameter is required');

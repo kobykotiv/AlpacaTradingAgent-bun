@@ -14,9 +14,9 @@ import {
 } from '@/app/api/_helpers/response';
 
 interface Props {
-  params: {
+  params: Promise<{
     symbol: string;
-  };
+  }>;
 }
 
 export async function GET(request: NextRequest, { params }: Props) {
@@ -33,7 +33,7 @@ export async function GET(request: NextRequest, { params }: Props) {
     return forbiddenResponse(authResult.error);
   }
 
-  const { symbol } = params;
+  const { symbol } = await params;
   
   if (!symbol || symbol.trim() === '') {
     return badRequestResponse('Symbol parameter is required');
